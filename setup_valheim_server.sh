@@ -92,17 +92,21 @@ function initial_setup() {
 function install_box86_and_box64() {
     uninstall_fex_emu
 
-    info "Installing required packages"
-    sudo apt -y install \
-        build-essential \
-        cmake \
-        gcc-arm-linux-gnueabihf \
-        git \
-        libc6:armhf \
-        libncurses6 \
-        libstdc++6 \
-        libpulse0
-    success "Installing required packages - Done"
+    if uname -p | grep "aarch64" >/dev/null; then
+        info "Installing required packages for ARM"
+        sudo apt -y install \
+            build-essential \
+            cmake \
+            gcc-arm-linux-gnueabihf \
+            git \
+            libc6:armhf \
+            libncurses6 \
+            libstdc++6 \
+            libpulse0
+        success "Installing required packages for ARM - Done"
+    else
+        info "Skipping ARM packages (x86_64 detected)"
+    fi
 
     if uname -p | grep "aarch64" >/dev/null; then
         notify "Found system to be 64bit Arm"
